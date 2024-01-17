@@ -23,7 +23,7 @@ namespace AwsTextract.api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
