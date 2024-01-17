@@ -1,7 +1,11 @@
 ﻿using AwsTextract.api.Models;
+using AwsTextract.api.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf.IO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AwsTextract.api.Controllers
 {
@@ -10,11 +14,25 @@ namespace AwsTextract.api.Controllers
     [Authorize]
     public class HomeController : ControllerBase
     {
-        public HomeController()
+        private readonly IDocumentValidationService _documentValidationService;
+        public HomeController(IDocumentValidationService documentValidationService)
         {
-            
+            _documentValidationService = documentValidationService;
         }
 
+        [HttpPost("UploadDocument")]
+        public IActionResult UploadDocument([FromForm] DocumentViewModel document)
+        {
+            var res=_documentValidationService.ValidateDocument(document);
+            if (res.IsValid)
+            {
+                //call the AWS S3 upload service
+
+                return Ok(res);
+            }
+            
+            return BadRequest(res);
+        }
         
 
         [HttpGet("Test")]
@@ -25,5 +43,7 @@ namespace AwsTextract.api.Controllers
             return Ok(new { Message = "Hello world" });
            
         }
+
+        
     }
 }

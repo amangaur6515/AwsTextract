@@ -48,6 +48,8 @@ namespace AwsTextract.api
                 });
             //add auth service
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IDocumentValidationService, DocumentValidationService>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
