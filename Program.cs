@@ -27,6 +27,16 @@ namespace AwsTextract.api
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Configure CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder
+                        .AllowAnyOrigin() // You can specify specific origins here instead of AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
             //jwt authentication service
             builder.Services.AddAuthentication(options =>
                 {
@@ -63,8 +73,9 @@ namespace AwsTextract.api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();
+            app.UseCors("AllowOrigin"); // Enable CORS policy
             app.UseAuthentication();
             app.UseAuthorization();
 
